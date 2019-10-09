@@ -10,7 +10,6 @@ Detail.tsx:
 ```import React from "react";
 import Header from "./Header";
 
-
 type Props = {
   propName?: React.ReactNode;
 };
@@ -42,7 +41,7 @@ import { withRouter } from "react-router-dom";
 class Header extends React.PureComponent {
 
   render () {
-    return (<>Test</>
+    return (<>Test</>);
   };
 }
 
@@ -53,11 +52,9 @@ Header.propTypes = {
 export default withRouter(
   connect(
     state => ({
-      user: state.login.user,
+      user: state,
     }),
-    {
-      ...loginActions,
-    }
+    {}
   )(Header)
 );
 ```
