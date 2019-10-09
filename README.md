@@ -1,3 +1,70 @@
+Hi, After the MR https://github.com/DefinitelyTyped/DefinitelyTyped/pull/38179 author @OliverJAsh. On my project I'm having a few problems with some tsx file that have reference to components that are using Proptypes with connect of react-redux on JS. I have narrow it down to this change since v7.1.3 is working fine.
+
+On all those cases I'm getting the same error, for example:
+`Type '{ propName: ReactNode; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<Pick<RouteComponentProps<any, StaticContext, any>, never>, any, any>> & Readonly<Pick<RouteComponentProps<any, StaticContext, any>, never>> & Readonly<...>'.
+  Property 'propName' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<Pick<RouteComponentProps<any, StaticContext, any>, never>, any, any>> & Readonly<Pick<RouteComponentProps<any, StaticContext, any>, never>> & Readonly<...>'.  TS2322`
+
+Example of this:
+Detail.tsx:
+
+```import React from "react";
+import Header from "./Header";
+
+
+type Props = {
+  propName?: React.ReactNode;
+};
+
+class Detail extends React.PureComponent<Props> {
+  render() {
+    const {
+      propName
+    } = this.props;
+    return (
+      <>
+        <Header backButton={propName} />
+      </>
+    );
+  }
+}
+
+export default Detail;
+```
+
+Header.js:
+
+```
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+
+class Header extends React.PureComponent {
+
+  render () {
+    return (<>Test</>
+  };
+}
+
+Header.propTypes = {
+  backButton: PropTypes.any,
+};
+
+export default withRouter(
+  connect(
+    state => ({
+      user: state.login.user,
+    }),
+    {
+      ...loginActions,
+    }
+  )(Header)
+);
+```
+
+_Originally posted by @Nicolas-Vega in https://github.com/DefinitelyTyped/DefinitelyTyped/pull/38179#issuecomment-536088368_
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
